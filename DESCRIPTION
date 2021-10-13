@@ -16,5 +16,7 @@ Config/testthat/edition: 3
 Imports: 
     bhappyr (>= 0.0.0.9000),
     crayon
-Remotes:  
+Remotes: 
     LudvigOlsen/bhappyr
+URL: https://github.com/natalia-mlad/etc
+BugReports: https://github.com/natalia-mlad/etc/issues
