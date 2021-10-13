@@ -1,0 +1,281 @@
+DevelopMyPackage <- function(name,
+                             rstudio = rstudioapi::isAvailable(),
+                             open = rlang::is_interactive(),
+                             roxygen = TRUE, check_name = TRUE) {
+  stopifnot(is.character(name))
+  require(rstudioapi)
+  require(usethis)
+  #require(glue)
+
+  # 1. check name: ----
+  sendToConsole("available::available(name = name)")
+  #available::available(name = name)
+
+
+  #ui_warn() / ui_stop()
+  #{qualification}
+  #qualification <- if (is_windows()) {
+#   glue("a special directory, i.e. some applications regard it as ")
+# } else {
+#   ""
+# }
+  ui_line("{name} is a available!")
+  if (ui_nope(
+    "Would you like to continue with the creation of this package?",
+    yes = "Yes", no = "No", shuffle = F)) {
+    ui_stop("OK. Use some of the other packages to come up with different name")
+  }
+  #invisible()
+  #path <- paste0(fs::path_home("OneDrive/pkgs"), "/", name)
+
+  #sendToConsole("usethis::create_package(path)")
+
+  #fs::dir_create("dev")
+}
+
+#' Create a package for a Shiny App using `{golem}`
+#'
+#' @param path Name of the folder to create the package in.
+#'     This will also be used as the package name.
+#' @param check_name Should we check that the package name is
+#'     correct according to CRAN requirements.
+#' @param open Boolean. Open the created project?
+#' @param package_name Package name to use. By default, {golem} uses
+#'     `basename(path)`. If `path == '.'` & `package_name` is
+#'     not explicitly set, then `basename(getwd())` will be used.
+#' @param without_comments Boolean. Start project without golem comments
+#' @param project_hook A function executed as a hook after project
+#'     creation. Can be used to change the default `{golem}` structure.
+#'     to override the files and content. This function is executed just
+#'     after the project is created.
+#' @param ... Arguments passed to the `project_hook()` function.
+#'
+#' @note
+#' For compatibility issue, this function turns `options(shiny.autoload.r)`
+#' to `FALSE`. See https://github.com/ThinkR-open/golem/issues/468 for more background.
+#'
+#' @importFrom cli cat_rule cat_line
+#' @importFrom utils getFromNamespace
+#' @importFrom rstudioapi isAvailable openProject
+#' @importFrom usethis use_latest_dependencies
+#' @importFrom fs path_abs path_file path dir_copy path_expand
+#' @importFrom yaml write_yaml
+#'
+#' @export
+#'
+#' @return The path, invisibly.
+# create_golem <- function(
+#   path,
+#   check_name = TRUE,
+#   open = TRUE,
+#   package_name = basename(path),
+#   without_comments = FALSE,
+#   project_hook = golem::project_hook,
+#   ...
+# ) {
+#
+#   path <- path_expand(path)
+#
+#   if (path == '.' & package_name == path_file(path)){
+#     package_name <- path_file(getwd())
+#   }
+#
+#   if (check_name){
+#     cat_rule("Checking package name")
+#     getFromNamespace("check_package_name", "usethis")(package_name)
+#     cat_green_tick("Valid package name")
+#   }
+#
+#   if (dir_exists(path)){
+#     res <- yesno(
+#       paste("The path", path, "already exists, override?")
+#     )
+#     if (!res){
+#       return(invisible(NULL))
+#     }
+#   }
+#
+#   cat_rule("Creating dir")
+#   dir_create(
+#     path,
+#     recurse = TRUE
+#   )
+#   cat_green_tick("Created package directory")
+#
+#
+#   if ( rstudioapi::isAvailable() ) {
+#     cat_rule("Rstudio project initialisation")
+#     rproj_path <- rstudioapi::initializeProject(path = path)
+#
+#     if (file.exists(rproj_path)){
+#
+#       enable_roxygenize(path = rproj_path)
+#
+#     }else{
+#       stop("can't create .Rproj file ")
+#
+#     }
+#
+#   }
+#
+#
+#
+#   cat_rule("Copying package skeleton")
+#   from <- golem_sys("shinyexample")
+#
+#   # Copy over whole directory
+#   dir_copy(path = from, new_path = path, overwrite = TRUE)
+#
+#   # Listing copied files ***from source directory***
+#   copied_files <- list.files(path = from,
+#                              full.names = FALSE,
+#                              all.files = TRUE,
+#                              recursive = TRUE)
+#
+#   # Going through copied files to replace package name
+#   for (f in copied_files) {
+#     copied_file <- file.path(path, f)
+#
+#     if (grepl("^REMOVEME", f)) {
+#       file.rename(from = copied_file,
+#                   to = file.path(path, gsub("REMOVEME", "", f)))
+#       copied_file <- file.path(path, gsub("REMOVEME", "", f))
+#     }
+#
+#     if (!grepl("ico$", copied_file)) {
+#       try({
+#         replace_word(
+#           file = copied_file,
+#           pattern = "shinyexample",
+#           replace = package_name)
+#       }, silent = TRUE)
+#     }
+#   }
+#
+#   cat_green_tick("Copied app skeleton")
+#
+#   cat_rule("Setting the default config")
+#   yml_path <- path(path, "inst/golem-config.yml")
+#
+#   conf <- yaml::read_yaml(yml_path, eval.expr = TRUE)
+#
+#   yaml_golem_wd <- "here::here()"
+#   attr(yaml_golem_wd, "tag") <- "!expr"
+#   conf$dev$golem_wd <- yaml_golem_wd
+#   conf$default$golem_name <- package_name
+#   conf$default$golem_version <- "0.0.0.9000"
+#   write_yaml(conf, yml_path)
+#
+#   cat_green_tick("Configured app")
+#   cat_rule("Running project hook function")
+#   old <- setwd(path)
+#   # TODO fix
+#   # for some weird reason test() fails here when using golem::
+#   # and I don't have time to search why rn
+#   if (substitute(project_hook) == "golem::project_hook"){
+#     project_hook <- getFromNamespace("project_hook", "golem")
+#   }
+#   project_hook(path = path, package_name = package_name, ...)
+#   setwd(old)
+#
+#   cat_green_tick("All set")
+#
+#   if ( without_comments == TRUE ) {
+#     files <- list.files(
+#       path = c(
+#         path(path, "dev"),
+#         path(path, "R")
+#       ),
+#       full.names = TRUE
+#     )
+#     for ( file in files ) {
+#       remove_comments(file)
+#     }
+#   }
+#
+#   old <- setwd(path)
+#   use_latest_dependencies()
+#
+#   # No .Rprofile for now
+#   # cat_rule("Appending .Rprofile")
+#   # write("# Sourcing user .Rprofile if it exists ", ".Rprofile", append = TRUE)
+#   # write("home_profile <- file.path(", ".Rprofile", append = TRUE)
+#   # write("  Sys.getenv(\"HOME\"), ", ".Rprofile", append = TRUE)
+#   # write("  \".Rprofile\"", ".Rprofile", append = TRUE)
+#   # write(")", ".Rprofile", append = TRUE)
+#   # write("if (file.exists(home_profile)){", ".Rprofile", append = TRUE)
+#   # write("  source(home_profile)", ".Rprofile", append = TRUE)
+#   # write("}", ".Rprofile", append = TRUE)
+#   # write("rm(home_profile)", ".Rprofile", append = TRUE)
+#   #
+#   # write("# Setting shiny.autoload.r to FALSE ", ".Rprofile", append = TRUE)
+#   # write("options(shiny.autoload.r = FALSE)", ".Rprofile", append = TRUE)
+#   # cat_green_tick("Appended")
+#
+#   setwd(old)
+#
+#   cat_rule("Done")
+#
+#   cat_line(
+#     paste0(
+#       "A new golem named ",
+#       package_name,
+#       " was created at ",
+#       path_abs(path),
+#       " .\n",
+#       "To continue working on your app, start editing the 01_start.R file."
+#     )
+#   )
+#
+#
+#
+#   if ( open & rstudioapi::isAvailable() ) {
+#     rstudioapi::openProject(path = path)
+#   }
+#
+#   return(
+#     invisible(
+#       path_abs(path)
+#     )
+#   )
+# }
+#
+
+
+# create_package <- function(path,
+#                            fields = list(),
+#                            rstudio = rstudioapi::isAvailable(),
+#                            roxygen = TRUE,
+#                            check_name = TRUE,
+#                            open = rlang::is_interactive()) {
+#   path <- user_path_prep(path)
+#   check_path_is_directory(path_dir(path))
+#
+#   name <- path_file(path_abs(path))
+#   if (check_name) {
+#     check_package_name(name)
+#   }
+#   challenge_nested_project(path_dir(path), name)
+#   challenge_home_directory(path)
+#
+#   create_directory(path)
+#   local_project(path, force = TRUE)
+#
+#   use_directory("R")
+#   use_description(fields, check_name = FALSE, roxygen = roxygen)
+#   use_namespace(roxygen = roxygen)
+#
+#   if (rstudio) {
+#     use_rstudio()
+#   }
+#
+#   if (open) {
+#     if (proj_activate(proj_get())) {
+#       # working directory/active project already set; clear the scheduled
+#       # restoration of the original project
+#       withr::deferred_clear()
+#     }
+#   }
+#
+#   invisible(proj_get())
+# }
