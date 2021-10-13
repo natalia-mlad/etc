@@ -5,18 +5,22 @@ Authors@R:
     person("Natalia", "Mladentseva", , "natashka.ml@gmail.com", role = c("aut", "cre"))
 Description: see above.
 License: MIT + file LICENSE
+URL: https://github.com/natalia-mlad/etc
+BugReports: https://github.com/natalia-mlad/etc/issues
+Imports: 
+    available,
+    bhappyr (>= 0.0.0.9000),
+    crayon,
+    rlang,
+    rstudioapi,
+    usethis
+Suggests: 
+    testthat (>= 3.0.0)
+Remotes: 
+    LudvigOlsen/bhappyr
+Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-Imports: 
-    bhappyr (>= 0.0.0.9000),
-    crayon
-Remotes: 
-    LudvigOlsen/bhappyr
-URL: https://github.com/natalia-mlad/etc
-BugReports: https://github.com/natalia-mlad/etc/issues
