@@ -1,17 +1,46 @@
-DevelopMyPackage <- function(name,
+
+
+#' Create a package just how I like it <3
+#'
+#' @param package_name Package name to use. By default, uses `basename(path)`.
+#' If `path == '.'` & `package_name` is not explicitly set,
+#' then `basename(getwd())` will be used.
+#'
+#' @param rstudio
+#' @param open Boolean. Open the created project?
+#' @param roxygen
+#' @param check_name Should we check that the package name is correct according to CRAN requirements.
+#'
+#' @importFrom cli cat_rule cat_line
+#' @importFrom utils getFromNamespace
+#' @importFrom rstudioapi isAvailable openProject sendToConsole
+#' @importFrom usethis use_latest_dependencies create_package
+#' @importFrom fs path_abs path_file path dir_copy path_expand
+#' @importFrom yaml write_yaml
+#' @importFrom magrittr pipe
+#'
+#' @export
+#'
+#' @return The path, invisibly.
+#'
+#' @note checke golem::create_golem for more inspiration
+#'
+DevelopMyPackage <- function(package_name,
                              rstudio = rstudioapi::isAvailable(),
                              open = rlang::is_interactive(),
                              roxygen = TRUE, check_name = TRUE) {
-  stopifnot(is.character(name))
-  require(rstudioapi)
-  require(usethis)
+  stopifnot(is.character(package_name))
+  #require(rstudioapi)
+  #require(usethis)
   #require(glue)
 
   # 1. check name: ----
-  sendToConsole("available::available(name = name)")
-  #available::available(name = name)
+  cat_rule("Checking name availability & suitability")
 
-
+  sendToConsole("available::available(name = package_name)")
+  #available::available(name = package_name)
+  ##
+  #cat_green_tick("Valid package name")
   #ui_warn() / ui_stop()
   #{qualification}
   #qualification <- if (is_windows()) {
@@ -19,51 +48,74 @@ DevelopMyPackage <- function(name,
 # } else {
 #   ""
 # }
-  ui_line("{name} is a available!")
+  ui_line("{package_name} is a available!")
   if (ui_nope(
     "Would you like to continue with the creation of this package?",
     yes = "Yes", no = "No", shuffle = F)) {
     ui_stop("OK. Use some of the other packages to come up with different name")
   }
   #invisible()
-  #path <- paste0(fs::path_home("OneDrive/pkgs"), "/", name)
+  #path <- paste0(fs::path_home("OneDrive/pkgs"), "/", package_name)
+  path <- fs::path_expand("~/OneDrive/pkgs/") %>%
+    paste0("/", package_name)
+  #%>% fs::path_norm() #fs::path_tidy()
+  ###
+  #   if (path == '.' & package_name == path_file(path)){
+  #     package_name <- path_file(getwd())
+  #   }
+  ###
+  #   cat_rule("Creating dir")
+  #   dir_create(
+  #     path,
+  #     recurse = TRUE
+  #   )
+  #   cat_green_tick("Created package directory")
+  ###
+  # desired directories:
+  #dir_names <- c("dev", "data", "code", "paper")
+  dir_names <- c("dev", "inst/data", "inst/paper")
+  # create the directories (silentrly ignoring existing ones)
+  fs::dir_create(dir_names)
+
+  #   if (dir_exists(path)){
+  #     res <- yesno(
+  #       paste("The path", path, "already exists, override?")
+  #     )
+  #     if (!res){
+  #       return(invisible(NULL))
+  #     }
+  #   }
 
   #sendToConsole("usethis::create_package(path)")
+  #create_package(path, rstudio = rstudio, open = open, roxygen = roxygen, check_name = check_name)
 
-  #fs::dir_create("dev")
+
+  #invisible()
+  #   cat_rule("Done")
+  #
+  #   cat_line(
+  #     paste0(
+  #       "A new golem named ",
+  #       package_name,
+  #       " was created at ",
+  #       path_abs(path),
+  #       " .\n",
+  #       "To continue working on your app, start editing the 01_start.R file."
+  #     )
+  #   )
+  #
+  #   if ( open & rstudioapi::isAvailable() ) {
+  #     rstudioapi::openProject(path = path)
+  #   }
+  #
+  #   return(
+  #     invisible(
+  #       path_abs(path)
+  #     )
+  #   )
+
 }
 
-#' Create a package for a Shiny App using `{golem}`
-#'
-#' @param path Name of the folder to create the package in.
-#'     This will also be used as the package name.
-#' @param check_name Should we check that the package name is
-#'     correct according to CRAN requirements.
-#' @param open Boolean. Open the created project?
-#' @param package_name Package name to use. By default, {golem} uses
-#'     `basename(path)`. If `path == '.'` & `package_name` is
-#'     not explicitly set, then `basename(getwd())` will be used.
-#' @param without_comments Boolean. Start project without golem comments
-#' @param project_hook A function executed as a hook after project
-#'     creation. Can be used to change the default `{golem}` structure.
-#'     to override the files and content. This function is executed just
-#'     after the project is created.
-#' @param ... Arguments passed to the `project_hook()` function.
-#'
-#' @note
-#' For compatibility issue, this function turns `options(shiny.autoload.r)`
-#' to `FALSE`. See https://github.com/ThinkR-open/golem/issues/468 for more background.
-#'
-#' @importFrom cli cat_rule cat_line
-#' @importFrom utils getFromNamespace
-#' @importFrom rstudioapi isAvailable openProject
-#' @importFrom usethis use_latest_dependencies
-#' @importFrom fs path_abs path_file path dir_copy path_expand
-#' @importFrom yaml write_yaml
-#'
-#' @export
-#'
-#' @return The path, invisibly.
 # create_golem <- function(
 #   path,
 #   check_name = TRUE,
@@ -73,35 +125,13 @@ DevelopMyPackage <- function(name,
 #   project_hook = golem::project_hook,
 #   ...
 # ) {
-#
 #   path <- path_expand(path)
-#
-#   if (path == '.' & package_name == path_file(path)){
-#     package_name <- path_file(getwd())
-#   }
 #
 #   if (check_name){
 #     cat_rule("Checking package name")
 #     getFromNamespace("check_package_name", "usethis")(package_name)
 #     cat_green_tick("Valid package name")
 #   }
-#
-#   if (dir_exists(path)){
-#     res <- yesno(
-#       paste("The path", path, "already exists, override?")
-#     )
-#     if (!res){
-#       return(invisible(NULL))
-#     }
-#   }
-#
-#   cat_rule("Creating dir")
-#   dir_create(
-#     path,
-#     recurse = TRUE
-#   )
-#   cat_green_tick("Created package directory")
-#
 #
 #   if ( rstudioapi::isAvailable() ) {
 #     cat_rule("Rstudio project initialisation")
@@ -213,31 +243,6 @@ DevelopMyPackage <- function(name,
 #   # cat_green_tick("Appended")
 #
 #   setwd(old)
-#
-#   cat_rule("Done")
-#
-#   cat_line(
-#     paste0(
-#       "A new golem named ",
-#       package_name,
-#       " was created at ",
-#       path_abs(path),
-#       " .\n",
-#       "To continue working on your app, start editing the 01_start.R file."
-#     )
-#   )
-#
-#
-#
-#   if ( open & rstudioapi::isAvailable() ) {
-#     rstudioapi::openProject(path = path)
-#   }
-#
-#   return(
-#     invisible(
-#       path_abs(path)
-#     )
-#   )
 # }
 #
 
