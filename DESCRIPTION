@@ -8,12 +8,14 @@ License: MIT + file LICENSE
 URL: https://github.com/natalia-mlad/etc
 BugReports: https://github.com/natalia-mlad/etc/issues
 Imports: 
-    available,
     bhappyr (>= 0.0.0.9000),
     crayon,
+    fs,
     rlang,
     rstudioapi,
-    usethis
+    usethis,
+    withr,
+    yaml
 Suggests: 
     testthat (>= 3.0.0)
 Remotes: 
