@@ -14,8 +14,8 @@
 #' @importFrom cli cat_rule cat_line
 #' @importFrom utils getFromNamespace
 #' @importFrom rstudioapi isAvailable openProject sendToConsole
-#' @importFrom usethis use_latest_dependencies create_package
-#' @importFrom fs path_abs path_file path dir_copy path_expand
+#' @importFrom usethis create_package use_latest_dependencies ui_line ui_nope
+#' @importFrom fs path path_abs path_file path_expand dir_copy dir_create
 #' @importFrom yaml write_yaml
 #' @importFrom magrittr pipe
 #'
@@ -30,13 +30,12 @@ DevelopMyPackage <- function(package_name,
                              open = rlang::is_interactive(),
                              roxygen = TRUE, check_name = TRUE) {
   stopifnot(is.character(package_name))
+  require(usethis)
   #require(rstudioapi)
-  #require(usethis)
   #require(glue)
 
   # 1. check name: ----
   cat_rule("Checking name availability & suitability")
-
   sendToConsole("available::available(name = package_name)")
   #available::available(name = package_name)
   ##
@@ -45,38 +44,33 @@ DevelopMyPackage <- function(package_name,
   #{qualification}
   #qualification <- if (is_windows()) {
 #   glue("a special directory, i.e. some applications regard it as ")
-# } else {
-#   ""
-# }
+# } else ""
   ui_line("{package_name} is a available!")
   if (ui_nope(
     "Would you like to continue with the creation of this package?",
     yes = "Yes", no = "No", shuffle = F)) {
     ui_stop("OK. Use some of the other packages to come up with different name")
   }
+  if (check_name) check_package_name(package_name)
   #invisible()
+
+  # 2. create the package directories: ----
+  path <- paste0(path_expand("~/OneDrive/pkgs"), "/", package_name)
+  ###
   #path <- paste0(fs::path_home("OneDrive/pkgs"), "/", package_name)
-  path <- fs::path_expand("~/OneDrive/pkgs/") %>%
-    paste0("/", package_name)
   #%>% fs::path_norm() #fs::path_tidy()
   ###
-  #   if (path == '.' & package_name == path_file(path)){
-  #     package_name <- path_file(getwd())
-  #   }
-  ###
-  #   cat_rule("Creating dir")
-  #   dir_create(
-  #     path,
-  #     recurse = TRUE
-  #   )
-  #   cat_green_tick("Created package directory")
-  ###
+  if (path == '.' & package_name == path_file(path)) {
+    package_name <- path_file(path_wd())
+  }
+  cat_rule("Creating dir")
+  dir_create(path, recurse = TRUE)
+  cat_green_tick("Created package directory")
   # desired directories:
   #dir_names <- c("dev", "data", "code", "paper")
   dir_names <- c("dev", "inst/data", "inst/paper")
   # create the directories (silentrly ignoring existing ones)
-  fs::dir_create(dir_names)
-
+  dir_create(dir_names, recurse = TRUE)
   #   if (dir_exists(path)){
   #     res <- yesno(
   #       paste("The path", path, "already exists, override?")
@@ -85,37 +79,95 @@ DevelopMyPackage <- function(package_name,
   #       return(invisible(NULL))
   #     }
   #   }
-
   #sendToConsole("usethis::create_package(path)")
   #create_package(path, rstudio = rstudio, open = open, roxygen = roxygen, check_name = check_name)
 
-
-  #invisible()
-  #   cat_rule("Done")
-  #
-  #   cat_line(
-  #     paste0(
-  #       "A new golem named ",
-  #       package_name,
-  #       " was created at ",
-  #       path_abs(path),
-  #       " .\n",
-  #       "To continue working on your app, start editing the 01_start.R file."
-  #     )
-  #   )
-  #
-  #   if ( open & rstudioapi::isAvailable() ) {
-  #     rstudioapi::openProject(path = path)
+  # 3. Copying package skeleton: ----
+  cat_rule("Copying package skeleton")
+  from <- path_package("etc", "package_skeleton")
+  to <- paste0(path, "/dev")
+  # Copy over whole directory
+  dir_copy(path = from, new_path = to, overwrite = TRUE)
+  # Listing copied files ***from source directory***
+  copied_files <-
+    list.files(
+      path = from,
+      full.names = FALSE,
+      all.files = TRUE,
+      recursive = TRUE
+    )
+  # Going through copied files to replace package name
+  # for (f in copied_files) {
+  #   copied_file <- file.path(path, f)
+  #   if (grepl("^REMOVEME", f)) {
+  #     file.rename(from = copied_file,
+  #                 to = file.path(path, gsub("REMOVEME", "", f)))
+  #     copied_file <- file.path(path, gsub("REMOVEME", "", f))
   #   }
-  #
-  #   return(
-  #     invisible(
-  #       path_abs(path)
-  #     )
-  #   )
+  #   if (!grepl("ico$", copied_file)) {
+  #     try({
+  #       replace_word(file = copied_file,
+  #                    pattern = "shinyexample",
+  #                    replace = package_name)
+  #     }, silent = TRUE)
+  #   }
+  # }
+  cat_green_tick("Copied app skeleton")
 
+  # 4. Setting the default config: ----
+  cat_rule("Setting the default config")
+  #   yml_path <- path(path, "inst/golem-config.yml")
+  #   conf <- yaml::read_yaml(yml_path, eval.expr = TRUE)
+  #   yaml_golem_wd <- "here::here()"
+  #   attr(yaml_golem_wd, "tag") <- "!expr"
+  #   conf$dev$golem_wd <- yaml_golem_wd
+  #   conf$default$golem_name <- package_name
+  #   conf$default$golem_version <- "0.0.0.1"
+  #   write_yaml(conf, yml_path)
+  cat_green_tick("Configured app")
+
+  # 5. creating pkg: ----
+
+
+  # 6. returning pkg: ----
+  cat_rule("Done")
+  cat_line("A new package named {package_name}
+     was created at {path}.\n") #,path_abs(path),
+  cat_line("Go to the `dev/01_start.R` file
+    to continue working on your package.")
+  if (open & rstudioapi::isAvailable()) {
+    rstudioapi::openProject(path = path)
+  }
+  return(invisible(path_abs(path)))
 }
 
+###
+# create_package <- function(path, fields = list(), rstudio = rstudioapi::isAvailable(),
+#                            roxygen = TRUE, check_name = TRUE, open = rlang::is_interactive()) {
+#   path <- user_path_prep(path)
+#   check_path_is_directory(path_dir(path))
+#   name <- path_file(path_abs(path))
+
+#   challenge_nested_project(path_dir(path), name)
+#   challenge_home_directory(path)
+#   create_directory(path)
+#   local_project(path, force = TRUE)
+#   use_directory("R")
+#   use_description(fields, check_name = FALSE, roxygen = roxygen)
+#   use_namespace(roxygen = roxygen)
+#   if (rstudio) {
+#     use_rstudio()
+#   }
+#   if (open) {
+#     if (proj_activate(proj_get())) {
+#       # working directory/active project already set; clear the scheduled
+#       # restoration of the original project
+#       withr::deferred_clear()
+#     }
+#   }
+#   invisible(proj_get())
+# }
+###
 # create_golem <- function(
 #   path,
 #   check_name = TRUE,
@@ -138,65 +190,12 @@ DevelopMyPackage <- function(package_name,
 #     rproj_path <- rstudioapi::initializeProject(path = path)
 #
 #     if (file.exists(rproj_path)){
-#
 #       enable_roxygenize(path = rproj_path)
-#
 #     }else{
 #       stop("can't create .Rproj file ")
-#
-#     }
-#
-#   }
-#
-#
-#
-#   cat_rule("Copying package skeleton")
-#   from <- golem_sys("shinyexample")
-#
-#   # Copy over whole directory
-#   dir_copy(path = from, new_path = path, overwrite = TRUE)
-#
-#   # Listing copied files ***from source directory***
-#   copied_files <- list.files(path = from,
-#                              full.names = FALSE,
-#                              all.files = TRUE,
-#                              recursive = TRUE)
-#
-#   # Going through copied files to replace package name
-#   for (f in copied_files) {
-#     copied_file <- file.path(path, f)
-#
-#     if (grepl("^REMOVEME", f)) {
-#       file.rename(from = copied_file,
-#                   to = file.path(path, gsub("REMOVEME", "", f)))
-#       copied_file <- file.path(path, gsub("REMOVEME", "", f))
-#     }
-#
-#     if (!grepl("ico$", copied_file)) {
-#       try({
-#         replace_word(
-#           file = copied_file,
-#           pattern = "shinyexample",
-#           replace = package_name)
-#       }, silent = TRUE)
 #     }
 #   }
 #
-#   cat_green_tick("Copied app skeleton")
-#
-#   cat_rule("Setting the default config")
-#   yml_path <- path(path, "inst/golem-config.yml")
-#
-#   conf <- yaml::read_yaml(yml_path, eval.expr = TRUE)
-#
-#   yaml_golem_wd <- "here::here()"
-#   attr(yaml_golem_wd, "tag") <- "!expr"
-#   conf$dev$golem_wd <- yaml_golem_wd
-#   conf$default$golem_name <- package_name
-#   conf$default$golem_version <- "0.0.0.9000"
-#   write_yaml(conf, yml_path)
-#
-#   cat_green_tick("Configured app")
 #   cat_rule("Running project hook function")
 #   old <- setwd(path)
 #   # TODO fix
@@ -207,9 +206,7 @@ DevelopMyPackage <- function(package_name,
 #   }
 #   project_hook(path = path, package_name = package_name, ...)
 #   setwd(old)
-#
 #   cat_green_tick("All set")
-#
 #   if ( without_comments == TRUE ) {
 #     files <- list.files(
 #       path = c(
@@ -245,42 +242,3 @@ DevelopMyPackage <- function(package_name,
 #   setwd(old)
 # }
 #
-
-
-# create_package <- function(path,
-#                            fields = list(),
-#                            rstudio = rstudioapi::isAvailable(),
-#                            roxygen = TRUE,
-#                            check_name = TRUE,
-#                            open = rlang::is_interactive()) {
-#   path <- user_path_prep(path)
-#   check_path_is_directory(path_dir(path))
-#
-#   name <- path_file(path_abs(path))
-#   if (check_name) {
-#     check_package_name(name)
-#   }
-#   challenge_nested_project(path_dir(path), name)
-#   challenge_home_directory(path)
-#
-#   create_directory(path)
-#   local_project(path, force = TRUE)
-#
-#   use_directory("R")
-#   use_description(fields, check_name = FALSE, roxygen = roxygen)
-#   use_namespace(roxygen = roxygen)
-#
-#   if (rstudio) {
-#     use_rstudio()
-#   }
-#
-#   if (open) {
-#     if (proj_activate(proj_get())) {
-#       # working directory/active project already set; clear the scheduled
-#       # restoration of the original project
-#       withr::deferred_clear()
-#     }
-#   }
-#
-#   invisible(proj_get())
-# }
