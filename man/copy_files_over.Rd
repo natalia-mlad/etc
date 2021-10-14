@@ -10,7 +10,7 @@ copy_files_over(...)
 \item{...}{filepaths of the files}
 }
 \value{
-NA
+list of files copied
 }
 \description{
 Copy files over for creating new packages

@@ -269,7 +269,7 @@ DevelopMyPackage <- function(package_name,
 #' Copy files over for creating new packages
 #'
 #' @param ... filepaths of the files
-#' @return NA
+#' @return list of files copied
 #' @export
 #' @examples
 #' if(FALSE) {
@@ -286,7 +286,7 @@ copy_files_over <- function(...) {
   newpaths <- fs::path_file(oldpaths) %>%
     paste0("R/", .) %>% fs::path_wd(.)
 
-  purrr::map2(oldpaths, newpaths, ~ fs::file_copy(.x, .y))
+  purrr::map2_chr(oldpaths, newpaths, ~ fs::file_copy(.x, .y))
   #invisible(newpaths)
 }
 ##
