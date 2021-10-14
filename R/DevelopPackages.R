@@ -83,6 +83,7 @@ DevelopMyPackage <- function(package_name,
   #   }
   #sendToConsole("usethis::create_package(path)")
   #create_package(path, rstudio = rstudio, open = open, roxygen = roxygen, check_name = check_name)
+  usethis::use_build_ignore("/dev")
 
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ 3. Copying the Package Skeleton:  ----
@@ -148,9 +149,9 @@ DevelopMyPackage <- function(package_name,
   use_email <- match.arg(use_email) #if(use_email == "work") { }
   authors <- switch(
     use_email,
-    "personal" = 'person("Natalia", "Mladentseva", email = "natashka.ml@gmail.com", role = c("aut", "cre"))',
-    "work" = 'person("Natalia", "Mladentseva", email = "Natalia.Mladentseva@loal.app", role = c("aut", "cre"))',
-    "city" = 'person("Natalia", "Mladentseva", email = "natalia.mladentseva@city.ac.uk", role = c("aut", "cre"))',
+    "personal" = 'person("Natalia", "Mladentseva", email = "natashka.ml@gmail.com", role = c("aut", "cre", "cph"))',
+    "work" = 'person("Natalia", "Mladentseva", email = "Natalia.Mladentseva@loal.app", role = c("aut", "cre", "cph"))',
+    "city" = 'person("Natalia", "Mladentseva", email = "natalia.mladentseva@city.ac.uk", role = c("aut", "cre", "cph"))',
     stop("Invalid `use_email` value")
     #,comment = c(ORCID = "YOUR-ORCID-ID"))
   )
@@ -161,6 +162,7 @@ DevelopMyPackage <- function(package_name,
     `Authors@R` = authors
   )
   use_description(desc, check_name = FALSE, roxygen = roxygen)
+  use_proprietary_license("Natalia Mladentseva")
   use_namespace(roxygen = roxygen)
 
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
