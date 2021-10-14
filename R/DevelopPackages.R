@@ -264,3 +264,40 @@ DevelopMyPackage <- function(package_name,
 # }
 #
 
+
+# copy over files ---------------------------------------------------------
+#' Copy files over for creating new packages
+#'
+#' @param ... filepaths of the files
+#' @return NA
+#' @export
+#' @examples
+#' if(FALSE) {
+#' copy_files_over(
+#' fs::path_home("OneDrive/R Functions/utilities.R"),
+#' fs::path_home("OneDrive/R Functions/irt.R")
+#' )}
+#'
+copy_files_over <- function(...) {
+  oldpaths <- c(...)
+  oldpaths <- unique(oldpaths)
+
+  require(dplyr)
+  newpaths <- fs::path_file(oldpaths) %>%
+    paste0("R/", .) %>% fs::path_wd(.)
+
+  purrr::map2(oldpaths, newpaths, ~ fs::file_copy(.x, .y))
+  #invisible(newpaths)
+}
+##
+# cate <- function(...){
+#   c(...)
+#   #l <- list(...)
+#   #paste(l, collapse=" ")
+# }
+# cate(9L,  5i, FALSE, "hello", "these", "are", "separate", "arguments", 3, TRUE)
+##
+# oldpath <- fs::path_home("OneDrive/R Functions/utilities.R")
+# newpath <- fs::path_wd("R/utilities.R")
+# fs::file_copy(oldpath, newpath)
+##

@@ -9,7 +9,8 @@ DevelopMyPackage(
   rstudio = rstudioapi::isAvailable(),
   open = rlang::is_interactive(),
   roxygen = TRUE,
-  check_name = TRUE
+  check_name = TRUE,
+  use_email = c("personal", "work", "city")
 )
 }
 \arguments{

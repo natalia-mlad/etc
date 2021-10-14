@@ -21,9 +21,12 @@
 ###
 
 ## copy any existing code? ####
-oldpath <- fs::path_home("OneDrive/R Functions/utilities.R")
-newpath <- fs::path_wd("R/utilities.R")
-fs::file_copy(oldpath, newpath)
+files <- c(
+  fs::path_home("OneDrive/R Functions/utilities.R"),
+  fs::path_home("OneDrive/R Functions/irt.R")
+)
+copy_files_over(files)
+
 
 ## Set options ----
 
