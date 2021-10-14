@@ -22,10 +22,10 @@
 
 ## copy any existing code? ####
 files <- c(
-  fs::path_home("OneDrive/R Functions/utilities.R"),
-  fs::path_home("OneDrive/R Functions/irt.R")
+  fs::path_home("OneDrive/pkgs/utilities.R"),
+  fs::path_home("OneDrive/pkgs/irt.R")
 )
-copy_files_over(files)
+etc::copy_files_over(files)
 
 
 ## Set options ----
