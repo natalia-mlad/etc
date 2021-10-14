@@ -25,7 +25,8 @@
 DevelopMyPackage <- function(package_name,
                              rstudio = rstudioapi::isAvailable(),
                              open = rlang::is_interactive(),
-                             roxygen = TRUE, check_name = TRUE) {
+                             roxygen = TRUE, check_name = TRUE,
+                             use_email = c("personal", "work", "city")) {
   stopifnot(is.character(package_name))
   require(usethis)
   #require(rstudioapi)
@@ -115,7 +116,7 @@ DevelopMyPackage <- function(package_name,
   #     }, silent = TRUE)
   #   }
   # }
-  ui_done("Copied app skeleton")
+  ui_done("Copied package skeleton")
 
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ 4. Setting the Default Config:  ----
@@ -135,13 +136,31 @@ DevelopMyPackage <- function(package_name,
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ 5. Creating the Package:  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # create_package <- function(path, fields = list(), rstudio = rstudioapi::isAvailable(),
-  #                            roxygen = TRUE, check_name = TRUE, open = rlang::is_interactive()) {
+  #create_package <- function(path, fields = list(), rstudio = rstudioapi::isAvailable(), roxygen = TRUE, check_name = TRUE, open = rlang::is_interactive()) {
   #create_directory(path)
+  # initialize prjct + R dir:
   local_project(path, force = TRUE)
   use_directory("R")
-  #TODO:
-  use_description(list(), check_name = FALSE, roxygen = roxygen)
+  # populate the description:
+  title <- "A package for ..." #What the Package Does (One Line, Title Case)
+  description <- "I will add a description later." #What the package does (one paragraph)
+  # which profile/email to use:
+  use_email <- match.arg(use_email) #if(use_email == "work") { }
+  authors <- switch(
+    use_email,
+    "personal" = 'person("Natalia", "Mladentseva", email = "natashka.ml@gmail.com", role = c("aut", "cre"))',
+    "work" = 'person("Natalia", "Mladentseva", email = "Natalia.Mladentseva@loal.app", role = c("aut", "cre"))',
+    "city" = 'person("Natalia", "Mladentseva", email = "natalia.mladentseva@city.ac.uk", role = c("aut", "cre"))',
+    stop("Invalid `use_email` value")
+    #,comment = c(ORCID = "YOUR-ORCID-ID"))
+  )
+  desc <- list(
+    Title = title,
+    Description = description,
+    Version = "0.0.0.1",
+    `Authors@R` = authors
+  )
+  use_description(desc, check_name = FALSE, roxygen = roxygen)
   use_namespace(roxygen = roxygen)
 
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
