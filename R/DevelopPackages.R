@@ -131,7 +131,7 @@ DevelopMyPackage <- function(package_name,
   #   conf$default$golem_version <- "0.0.0.1"
   #   write_yaml(conf, yml_path)
   #ui_done("{ui_field('Configured app')}")
-  ui_done("Configured app")
+  ui_done("Configured the package")
 
   ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ 5. Creating the Package:  ----
