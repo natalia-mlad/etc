@@ -4,3 +4,5 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^/dev$
+^devstuff_history\.R$
+^cran-comments\.md$
