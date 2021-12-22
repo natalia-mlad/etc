@@ -2,7 +2,13 @@
 
 export(DevelopMyPackage)
 export(HappyFeedback)
+export(code.converter)
+export(combine_pdfs)
 export(copy_files_over)
+export(identify_duplicates)
+export(remove_duplicates)
+export(rotate_pdf)
+export(sort_my_zips)
 importFrom(fs,dir_copy)
 importFrom(fs,dir_create)
 importFrom(fs,path)
