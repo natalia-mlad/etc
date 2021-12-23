@@ -25,6 +25,8 @@ then \code{basename(getwd())} will be used.}
 \item{roxygen}{Boolean. Use roxygen?}
 
 \item{check_name}{Should we check that the package name is correct according to CRAN requirements.}
+
+\item{use_email}{one from "personal", "work", or "city"}
 }
 \value{
 The path, invisibly.

@@ -6,3 +6,5 @@
 ^/dev$
 ^devstuff_history\.R$
 ^cran-comments\.md$
+^history$
+sessionInfoLog

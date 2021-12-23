@@ -8,6 +8,7 @@
 #' @param open Boolean. Open the created project?
 #' @param roxygen Boolean. Use roxygen?
 #' @param check_name Should we check that the package name is correct according to CRAN requirements.
+#' @param use_email one from "personal", "work", or "city"
 #'
 #' @importFrom rstudioapi isAvailable openProject sendToConsole
 #' @importFrom usethis create_package use_latest_dependencies ui_line ui_nope
