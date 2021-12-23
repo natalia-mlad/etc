@@ -23,13 +23,15 @@
 #' magrittr pipe
 #' example DevelopMyPackage("bunny")
 #'
+#' @import usethis fs
+#'
 DevelopMyPackage <- function(package_name,
                              rstudio = rstudioapi::isAvailable(),
                              open = rlang::is_interactive(),
                              roxygen = TRUE, check_name = TRUE,
                              use_email = c("personal", "work", "city")) {
   stopifnot(is.character(package_name))
-  require(usethis)
+  #require(usethis)
   #require(rstudioapi)
   #require(glue)
 
@@ -279,15 +281,16 @@ DevelopMyPackage <- function(package_name,
 #' fs::path_home("OneDrive/R Functions/irt.R")
 #' )}
 #'
+#' @import dplyr fs
+#'
 copy_files_over <- function(...) {
   oldpaths <- c(...)
   oldpaths <- unique(oldpaths)
 
-  require(dplyr)
-  newpaths <- fs::path_file(oldpaths) %>%
-    paste0("R/", .) %>% fs::path_wd(.)
+  newpaths <- path_file(oldpaths) %>%
+    paste0("R/", .) %>% path_wd(.)
 
-  purrr::map2_chr(oldpaths, newpaths, ~ fs::file_copy(.x, .y))
+  purrr::map2_chr(oldpaths, newpaths, ~ file_copy(.x, .y))
   #invisible(newpaths)
 }
 ##

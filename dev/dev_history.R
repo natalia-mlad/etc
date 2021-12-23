@@ -16,6 +16,7 @@ use_testthat()
 ##
 use_package("crayon", type = "Imports")
 use_dev_package("bhappyr", type = "Imports", remote = "LudvigOlsen/bhappyr")
+# use_package(c())
 ##
 #testthat::test_file("C:/Users/Natalia/OneDrive/R Functions/etc/tests/testthat/test-HappyFeedback.R")
 ##
@@ -31,15 +32,18 @@ library(etc)
 ##
 # > checking dependencies in R code ... WARNING
 # '::' or ':::' imports not declared from:
-#   'CodeDepends' 'archive' 'cli' 'digest' 'janitor' 'knitr' 'purrr'
-# 'qpdf' 'staplr' 'stringr'
+# 'CodeDepends' 'archive' 'cli' 'digest' 'janitor' 'knitr' 'purrr' 'qpdf' 'staplr' 'stringr'
+#
 # 'library' or 'require' calls not declared from:
 #   'dplyr' 'usethis'
+#
 # 'library' or 'require' calls in package code:
 #   'dplyr' 'usethis'
-# Please use :: or requireNamespace() instead.
-# See section 'Suggested packages' in the 'Writing R Extensions' manual.
 #
+# Please use :: or requireNamespace() instead.
+#
+# See section 'Suggested packages' in the 'Writing R Extensions' manual.
+##
 
 ##
 # > checking R code for possible problems ... NOTE
