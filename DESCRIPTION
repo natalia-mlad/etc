@@ -11,8 +11,10 @@ Imports:
     bhappyr (>= 0.0.0.9000),
     crayon,
     fs,
+    purrr,
     rlang,
     rstudioapi,
+    rvest,
     usethis,
     withr,
     yaml
