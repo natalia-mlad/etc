@@ -4,12 +4,10 @@
 \alias{combine_pdfs}
 \title{combine pdfs}
 \usage{
-combine_pdfs(files, dir)
+combine_pdfs(files)
 }
 \arguments{
 \item{files}{files}
-
-\item{dir}{dir}
 }
 \description{
 combine pdfs

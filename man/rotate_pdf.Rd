@@ -2,7 +2,7 @@
 % Please edit documentation in R/ManipulatePDFs.R
 \name{rotate_pdf}
 \alias{rotate_pdf}
-\title{rotate_pdf}
+\title{rotate pdf}
 \usage{
 rotate_pdf(file_name, dir, rotation_degrees = 90)
 }
@@ -14,5 +14,5 @@ rotate_pdf(file_name, dir, rotation_degrees = 90)
 \item{rotation_degrees}{numeric, default 90}
 }
 \description{
-rotate_pdf
+rotate pdf
 }
