@@ -2,7 +2,7 @@
 % Please edit documentation in R/DuplicatesManager.R
 \name{identify_duplicates}
 \alias{identify_duplicates}
-\title{identify_duplicates}
+\title{Identify Duplicate Files}
 \usage{
 identify_duplicates(my_dir, glob, algo = "xxhash64", excluded_dir = NULL)
 }
@@ -19,7 +19,10 @@ identify_duplicates(my_dir, glob, algo = "xxhash64", excluded_dir = NULL)
 a list
 }
 \description{
-identify_duplicates
+DupeGuru-esque.
+No output difference between the different algorithms:
+algo = c("md5","crc32", "sha1", "sha256", "sha512",
+"xxhash32", "xxhash64", "murmur32", "blake3")
 }
 \examples{
 \dontrun{

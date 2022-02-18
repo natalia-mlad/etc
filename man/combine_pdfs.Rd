@@ -4,10 +4,14 @@
 \alias{combine_pdfs}
 \title{combine pdfs}
 \usage{
-combine_pdfs(files)
+combine_pdfs(files, output_name = "output", dir = NULL)
 }
 \arguments{
 \item{files}{files}
+
+\item{output_name}{output.pdf by default; only specify name, not extension}
+
+\item{dir}{NULL by default so will put in common path of the files}
 }
 \description{
 combine pdfs

@@ -27,21 +27,22 @@ rotate_pdf <- function(file_name, dir, rotation_degrees = 90) {
 #' combine pdfs
 #'
 #' @param files files
+#' @param output_name output.pdf by default; only specify name, not extension
+#' @param dir NULL by default so will put in common path of the files
 #'
 #' @export
-combine_pdfs <- function(files) {
+combine_pdfs <- function(files, output_name = "output", dir = NULL) {
+  stopifnot(all(file_exists(files)))
   # path_tidy(files) == files %>% allTRUE()
   # dir <- files %>% path_dir() %>% unique()
-  dir <- path_common(files)
-  input_pdfs <- files
   # input_pdfs <- paste0(dir, "/", files)
-  stopifnot(all(file_exists(input_pdfs)))
+  if(is.null(dir)) dir <- path_common(files)
 
-  output_pdf <- file.path(dir, "output.pdf")
+  output_pdf <- file.path(dir, paste0(output_name, ".pdf"))
   stopifnot(!file_exists(output_pdf))
 
-  qpdf::pdf_combine(input = input_pdfs, output = output_pdf)
-  usethis::ui_field("See {dir} for output PDF.")
+  qpdf::pdf_combine(input = files, output = output_pdf)
+  usethis::ui_done("See {dir} for output PDF.")
   file_show(output_pdf)
 }
 
