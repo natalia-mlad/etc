@@ -4,6 +4,10 @@ library(GrpString)
 
 
 # using it ----------------------------------------------------------------
+out <- extract_my_zips(path_home("OneDrive/PDFs/ScienceDirectZips"))
+out
+
+###
 path <- path_home(
   "OneDrive/PhD Psychology/01 - Papers, Books, Theses/01 - Journals/International Gambling Studies"
 )
@@ -93,6 +97,12 @@ walk(my_cmd, shell)
 
 
 ####
+
+## dev ####
+tidyverse::tidyverse_packages()
+my_pkgs <- c("purrr", "dplyr", "tibble", "stringr")
+originize_file("R/ArchiveManager.R", pkgs = my_pkgs)
+
 ## notes ####
 CommonPatt(OBJECTS, low = 50) %>%
   slice(1) %>% pull(Pattern)

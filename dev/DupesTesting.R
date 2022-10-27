@@ -1,3 +1,26 @@
+#### path length: ####
+library(fs)
+library(tidyverse)
+##
+# mypath <- "C:/Users/Natalia/OneDrive/PhD Psychology"
+# dir_ls(mypath, type = "directory")
+mypath <- paste0(#mypath,
+  "C:/Users/Natalia/OneDrive/PhD Psychology",
+  "/01 - Investigation - Developing Creditworthiness Measure"
+)
+out <- dir_ls(mypath, all = TRUE, recurse = TRUE)
+nchar(out) %>% hist
+nchar(out) %>% max #268
+
+out[nchar(out) >= 259] %>%
+  str_remove(paste0(mypath, "/")) %>%
+  path_split()
+
+out[nchar(out) >= 259] %>% tail(1) %>% nchar()
+
+
+##
+#### DupesTesting: #####
 # Cntrl+Shift+D
 # Cntrl+Shift+B
 library(fs); library(digest); library(tidyverse)

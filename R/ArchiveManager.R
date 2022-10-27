@@ -54,22 +54,22 @@ extract_my_zips <- function(dirpath, all = FALSE, recurse = FALSE) {
   ## 1
   # table of zip file info:
   my_zips <- fs::dir_info(path = dirpath, glob = extensions_used, recurse = recurse) %>%
-    janitor::remove_constant(quiet = T) %>% # rename(filename = path) %>%
-    mutate(name = fs::path_ext_remove(path), .after = path)
+    janitor::remove_constant(quiet = T) %>% # dplyr::rename(filename = path) %>%
+    dplyr::mutate(name = fs::path_ext_remove(path), .after = path)
 
   # check for existing dirs:
   existing_dir <- fs::dir_ls(path = dirpath, type = "directory", recurse = recurse)
   zips_to_check <- my_zips %>%
-    filter(name %in% existing_dir) %>%
-    pull(path)
+    dplyr::filter(name %in% existing_dir) %>%
+    dplyr::pull(path)
 
   ## 2
   my_zips <- my_zips %>%
-    filter(!(name %in% existing_dir)) %>%
+    dplyr::filter(!(name %in% existing_dir)) %>%
     # mutate(my_dir = fs::path_wd(name), .after = name) %>%
-    mutate(zip_contents = map(path, ~archive::archive(.x) %>% filter(size != 0)),
+    dplyr::mutate(zip_contents = purrr::map(path, ~archive::archive(.x) %>% dplyr::filter(size != 0)),
            .after = name) %>%
-    mutate(n_zip = map_int(zip_contents, nrow),
+    dplyr::mutate(n_zip = purrr::map_int(zip_contents, nrow),
            .after = zip_contents)
 
   # Create the directory that corresponds to the zip name:
@@ -78,26 +78,26 @@ extract_my_zips <- function(dirpath, all = FALSE, recurse = FALSE) {
 
   ## 3
   try({
-    map2(my_zips$path,
+    purrr::map2(my_zips$path,
          my_zips$name,
          ~ archive::archive_extract(.x, dir = .y))
   })
 
   ## Checks
   my_zips <- my_zips %>%
-    mutate(extracted_contents = name %>%
-             map(~ dir_info(.x, type = "file", all = T,
+    dplyr::mutate(extracted_contents = name %>%
+             purrr::map(~ dir_info(.x, type = "file", all = T,
                             recurse = T, fail = F)),
            .after = n_zip) %>%
-    mutate(n_extracted = map_int(extracted_contents, nrow),
+    dplyr::mutate(n_extracted = purrr::map_int(extracted_contents, nrow),
            .after = extracted_contents)
   # dir_ls(my_dir, recurse = T, all = T) %>% path_file()
   #> [1] "code.R"     "data.Rdata" "__MACOSX"
-  problematic_extractions <- my_zips %>% filter(n_extracted != n_zip)
-  my_zips <- my_zips %>% filter(n_extracted == n_zip)
+  problematic_extractions <- my_zips %>% dplyr::filter(n_extracted != n_zip)
+  my_zips <- my_zips %>% dplyr::filter(n_extracted == n_zip)
 
   ## return
-  out <- lst(
+  out <- dplyr::lst(
     extensions_used,
     zips_to_check,
     problematic_extractions,
