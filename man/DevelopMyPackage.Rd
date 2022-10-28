@@ -35,7 +35,7 @@ The path, invisibly.
 Create a package just how I like it <3
 }
 \note{
-checke golem::create_golem for more inspiration;
+check golem::create_golem for more inspiration;
 magrittr pipe
 example DevelopMyPackage("bunny")
 }

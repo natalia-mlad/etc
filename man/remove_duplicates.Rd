@@ -11,7 +11,7 @@ remove_duplicates(df, bad_dir, auto_remove = FALSE)
 
 \item{bad_dir}{directories that shouldn't contain the files}
 
-\item{auto_remove}{T/F}
+\item{auto_remove}{TRUE or FALSE; default is FALSE}
 }
 \value{
 a list

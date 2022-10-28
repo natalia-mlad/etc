@@ -4,13 +4,15 @@
 \alias{code.converter}
 \title{code.converter}
 \usage{
-code.converter(script_path, ...)
+code.converter(script)
 }
 \arguments{
-\item{script_path}{script_path}
-
-\item{...}{dot}
+\item{script}{code script path (e.g., "untitled.R")}
 }
 \description{
-code.converter
+Have you ever wanted to convert your normal R code into a
+\code{\link[targets:tar_target]{targets::tar_target()}} pipeline without doing it manually?
+Well, you're in luck, because that's exactly what this function does.
+It's probably some of the worst code I've written in my life
+and I want to improve it one of these days, but honestly? It works!
 }

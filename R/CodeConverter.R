@@ -1,46 +1,25 @@
-#' cc_findFiles
-#'
-#' @param path path
-#'
-cc_findFiles <- function(path = NuLL) {
-  if (is.null(path)) {
-    path <- fs::path_wd()
-  }
-
-  fs::dir_info(path = path, glob = "*.Rmd|.R") %>%
-    arrange(desc(modification_time)) %>%
-    select(path, size, modification_time) %>%
-    as.data.frame()
-}
-
 #' code.converter
 #'
-#' @param script_path script_path
-#' @param ... dot
+#' Have you ever wanted to convert your normal R code into a
+#' [targets::tar_target()] pipeline without doing it manually?
+#' Well, you're in luck, because that's exactly what this function does.
+#' It's probably some of the worst code I've written in my life
+#' and I want to improve it one of these days, but honestly? It works!
 #'
+#' @param script code script path (e.g., "untitled.R")
 #' @export
 #'
-code.converter <- function(script_path, ...) {
-  stopifnot(is.character(script_path))
+code.converter <- function(script) {
+  # TODO: add dot parameters for further functionalities?
+  stopifnot(is.character(script))
 
-# packages:
-  # require(fs)
-  # require(tidyverse)
-  # require(CodeDepends)
-  # functions:
-  # `%notin%` <- Negate(`%in%`)
-
-# Step 1: specify code path. ####
-  #script <- "untitled.R"
-  script <- script_path
-
-  # Step 2: extract info. ####
+  # Step 1: extract info. ####
   src <- CodeDepends::readScript(script[1])
   cd <- CodeDepends::getInputs(src)
   libs <- unique(unlist(lapply(cd, slot, name = "libraries"))) # TODO: could the code below be done with purrr instead? & would it be faster?
   #map(cd, "libraries") %>% unlist() %>% unique()
 
-  # Step 3: extract actual code. ####
+  # Step 2: extract actual code. ####
   code <- CodeDepends::getDetailedTimelines(info = cd) %>%
     split(.$var) %>%
     map( ~ .x[which(.x$defined == TRUE), ]) %>%
@@ -62,7 +41,7 @@ code.converter <- function(script_path, ...) {
     filter(n.defined == 0) %>% select(step) %>%
     map( ~ src[.x] %>% paste()) %>% flatten_chr()
 
-  # Step 4: write to files ####
+  # Step 3: write to files ####
   dir_create("CLEANED")
 
   fileConn <- file(paste0("CLEANED/CLEANED-", script))
@@ -114,12 +93,12 @@ code.converter <- function(script_path, ...) {
   knitr::spin(paste0("CLEANED/REPORT-", script), knit = FALSE)
   fs::file_delete(paste0("CLEANED/REPORT-", script))
 
-  # Step 5: view the result! ####
+  # Step 4: view the result! ####
   # file_show(paste0("CLEANED/CLEANED-", script))
   out0 <- CodeDepends::getDetailedTimelines(info = cd)
   out1 <- paste0("CLEANED/CLEANED-", script)
 
-# BONUS INFO ####
+  # BONUS INFO ####
   out2 <- unlist(lapply(cd, slot, name = "removes")) %>% unique()
 
   out3 <- CodeDepends::getDetailedTimelines(info = cd) %>% split(.$var) %>%
@@ -131,7 +110,20 @@ code.converter <- function(script_path, ...) {
     map(~ which(.x == TRUE)) %>%
     unlist() %>% names() %>% unique()
 
-# Step 6: Output ####
+  # Step 5: Output ####
   output <- list(script, cd, out0, out1, out2, out3, out4)
   return(output)
+}
+
+
+# cc_findFiles ------------------------------------------------------------
+#' cc_findFiles
+#' Find files that we can use for the code converter function
+#' @param path directory path of where to search (optional)
+cc_findFiles <- function(path = NULL) {
+  if (is.null(path)) path <- fs::path_wd()
+  fs::dir_info(path = path, glob = "*.Rmd|.R") %>%
+    arrange(desc(modification_time)) %>%
+    select(path, size, modification_time) %>%
+    as.data.frame()
 }

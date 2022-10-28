@@ -7,13 +7,13 @@
 identify_duplicates(my_dir, glob, algo = "xxhash64", excluded_dir = NULL)
 }
 \arguments{
-\item{my_dir}{the directory to check}
+\item{my_dir}{the path of the directory to check}
 
-\item{glob}{type of file to search for}
+\item{glob}{type of file to search for (e.g., "*.pdf")}
 
 \item{algo}{hashing algorithm to use (see digest::digest)}
 
-\item{excluded_dir}{directories to exclude}
+\item{excluded_dir}{a string of directories to exclude; has to start with '/' and end with '/'}
 }
 \value{
 a list

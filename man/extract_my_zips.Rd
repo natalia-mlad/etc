@@ -2,13 +2,12 @@
 % Please edit documentation in R/ArchiveManager.R
 \name{extract_my_zips}
 \alias{extract_my_zips}
-\title{extract_my_zips
-Used to be called sort_my_zips}
+\title{extract_my_zips}
 \usage{
 extract_my_zips(dirpath, all = FALSE, recurse = FALSE)
 }
 \arguments{
-\item{dirpath}{path}
+\item{dirpath}{directory path}
 
 \item{all}{logical (default = FALSE). All posible archive formats or just .zip?}
 
@@ -19,8 +18,12 @@ If TRUE, recurse fully. If a positive number, the number of levels to recurse.}
 a list
 }
 \description{
-extract_my_zips
 Used to be called sort_my_zips
+}
+\details{
+Sometimes I end up accumilating a large collection of zip files
+and I just want to quickly extract all of them, so (naturally)
+I automated this process in R.
 }
 \examples{
 \dontrun{

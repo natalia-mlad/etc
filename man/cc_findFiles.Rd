@@ -2,13 +2,15 @@
 % Please edit documentation in R/CodeConverter.R
 \name{cc_findFiles}
 \alias{cc_findFiles}
-\title{cc_findFiles}
+\title{cc_findFiles
+Find files that we can use for the code converter function}
 \usage{
-cc_findFiles(path = NuLL)
+cc_findFiles(path = NULL)
 }
 \arguments{
-\item{path}{path}
+\item{path}{directory path of where to search (optional)}
 }
 \description{
 cc_findFiles
+Find files that we can use for the code converter function
 }
