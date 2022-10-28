@@ -1,8 +1,12 @@
-
 #' extract_my_zips
+#'
 #' Used to be called sort_my_zips
 #'
-#' @param dirpath path
+#' Sometimes I end up accumilating a large collection of zip files
+#' and I just want to quickly extract all of them, so (naturally)
+#' I automated this process in R.
+#'
+#' @param dirpath directory path
 #' @param all logical (default = FALSE). All posible archive formats or just .zip?
 #' @param recurse logical (default = FALSE). as used in {fs} pkg functions.
 #' If TRUE, recurse fully. If a positive number, the number of levels to recurse.
@@ -19,10 +23,6 @@
 #' }
 #'
 extract_my_zips <- function(dirpath, all = FALSE, recurse = FALSE) {
-  # require(tidyverse); require(archive); require(fs)
-  # wd <- fs::path_wd(); dirpath <- fs::path_wd()
-  # dirpath <- path_home("OneDrive/PhD Psychology/01 - R Project")
-
   # TODO: add commentary re: # extracted etc.
   dirpath <- fs::path_real(dirpath)
   stopifnot(fs::dir_exists(dirpath))

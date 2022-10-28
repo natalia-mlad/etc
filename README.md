@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 The goal of etc is to provide me with extraneous functions to make my
-life easier. It’s just a varriety of bits and bobs in a nutshell.
+life easier. It’s just a variety of bits and bobs in a nutshell.
 
 ## Installation
 

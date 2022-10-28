@@ -1,3 +1,8 @@
+# require(tidyverse); require(archive); require(fs)
+# wd <- fs::path_wd(); dirpath <- fs::path_wd()
+# dirpath <- path_home("OneDrive/PhD Psychology/01 - R Project")
+
+
 library(tidyverse)
 library(GrpString)
 # library(stringdist)

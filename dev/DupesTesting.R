@@ -1,3 +1,106 @@
+# fs::file_show(
+#   "C:/Users/Natalia/OneDrive/PhD Psychology/01 - R Project/duplicated-files.R"
+#   )
+
+
+##
+# out %>%
+#   #group_by(id) %>%
+#   arrange(n) %>%
+#   filter(row_number() == 1) %>%
+#   # | row_number()==n()
+#   #filter(id == 1)
+#   arrange(id) %>%
+#   pull(id) %>% unique() %>% length()
+# out %>%
+#   filter(any(duplicated(dir) & duplicated(id))) %>%
+#   filter(n == n_group) %>%
+#   filter(row_number() != 1)
+# out %>%
+#   filter(any(duplicate_files %in% to_remove)) %>%
+#   select(id, duplicate_files) %>%
+#   mutate(remove = if_else(duplicate_files %in% to_remove, 1, 0)) %>%
+#   slice(3,6) %>%
+#   filter(all(remove == 1))
+##
+
+
+# cli ---------------------------------------------------------------------
+# > x <- cli_vec(names(mtcars), list(vec_trunc = 3))
+# > cli_text("Column names: {x}.")
+# months <- month.name[1:3]
+# cli_text("{.val {months}}")
+# ?cli_tick_reset()
+# ?themes
+# cli_h1("Header {.emph 1}")
+# cli_h2("Header {.emph 2}")
+# cli_h3("Header {.emph 3}")
+# cli_bullets(c(
+#   "noindent",
+#   " " = "indent",
+#   "*" = "bullet",
+#   ">" = "arrow",
+#   "v" = "success",
+#   "x" = "danger",
+#   "!" = "warning",
+#   "i" = "info"
+# ))
+# debugonce(cli_bullets)
+# cli_bullets(c("x" = to_remove))
+#args$text$x1
+# $str
+# /03 - Data Science Sharepoint Copy/01 - Reports/TSB_Consumers_Matter_Loans (1).pdf
+#
+# $values
+# <environment: 0x0000020e2c6088c0>
+#
+#args$text$x10
+# $str
+# /01 - Papers, Books, Theses/Literature on Forgiveness/Forgiveness_in_marriage_Current_status_a (2).pdf
+#
+# $values
+# <environment: 0x0000020e2c50c2c8>
+# #
+# cli_bullets(c("x" = "danger"))
+# cli_bullets("x" = "boop")
+# cli_bullets(c("x" = "bunnies"))
+# # args$text
+# $x
+# $str
+# bunnies
+#
+# $values
+# <environment: 0x0000020e2d4057c8>
+#
+# attr(,"class")
+# [1] "cli_glue_delay"
+#
+#cli__message: function (type, args, .auto_close = TRUE, .envir = NULL, record = getOption("cli.record")) {
+#   if ("id" %in% names(args) && is.null(args$id))
+#     args$id <- new_uuid()
+#   if (.auto_close && !is.null(.envir) && !identical(.envir, .GlobalEnv)) {
+#     if (type == "status") {
+#       defer(cli_status_clear(id = args$id, result = args$auto_result),
+#             envir = .envir, priority = "first")
+#     }
+#     else {
+#       defer(cli_end(id = args$id), envir = .envir, priority = "first")
+#     }
+#   }
+#   cond <- cli__message_create(type, args)
+#   if (is.null(record)) {
+#     cli__message_emit(cond)
+#     invisible(args$id)
+#   }
+#   else {
+#     cli_recorded[[record]] <- c(cli_recorded[[record]],
+#                                 list(cond))
+#     invisible(cond)
+#   }
+# }
+# args$text$x$str #danger
+
+
 #### path length: ####
 library(fs)
 library(tidyverse)
