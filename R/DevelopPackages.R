@@ -1,4 +1,4 @@
-#' @title Create a package just how I like it <3
+#' Create a package just how I like it <3
 #'
 #' A personalised version of [usethis::create_package()]
 #'
@@ -14,7 +14,10 @@
 #'
 #' @export
 #' @return The path, invisibly.
-#' @example DevelopMyPackage("bunny")
+#' @examples
+#' \dontrun{
+#' DevelopMyPackage("bunny")
+#' }
 #'
 DevelopMyPackage <- function(package_name,
                              rstudio = rstudioapi::isAvailable(),

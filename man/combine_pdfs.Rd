@@ -2,7 +2,8 @@
 % Please edit documentation in R/ManipulatePDFs.R
 \name{combine_pdfs}
 \alias{combine_pdfs}
-\title{combine pdfs}
+\title{combine pdfs
+A wrapper around \code{\link[qpdf:qpdf]{qpdf::pdf_combine()}}}
 \usage{
 combine_pdfs(files, output_name = "output", dir = NULL)
 }
@@ -15,4 +16,5 @@ combine_pdfs(files, output_name = "output", dir = NULL)
 }
 \description{
 combine pdfs
+A wrapper around \code{\link[qpdf:qpdf]{qpdf::pdf_combine()}}
 }

@@ -2,17 +2,19 @@
 % Please edit documentation in R/ManipulatePDFs.R
 \name{rotate_pdf}
 \alias{rotate_pdf}
-\title{rotate pdf}
+\title{rotate pdf
+A wrapper around \code{\link[staplr:rotate_pdf]{staplr::rotate_pdf()}}}
 \usage{
 rotate_pdf(file_name, dir, rotation_degrees = 90)
 }
 \arguments{
-\item{file_name}{e.g., "NM.pdf"}
+\item{file_name}{the full file name e.g., "NM.pdf"}
 
-\item{dir}{e.g., fs::path_home_r("01 - Important Documents/NM/BRP")}
+\item{dir}{directory is separate}
 
 \item{rotation_degrees}{numeric, default 90}
 }
 \description{
 rotate pdf
+A wrapper around \code{\link[staplr:rotate_pdf]{staplr::rotate_pdf()}}
 }

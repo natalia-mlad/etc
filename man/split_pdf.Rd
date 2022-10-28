@@ -2,8 +2,7 @@
 % Please edit documentation in R/ManipulatePDFs.R
 \name{split_pdf}
 \alias{split_pdf}
-\title{split pdf
-create a new pdf with a subset of the input pages}
+\title{split pdf}
 \usage{
 split_pdf(file_name, dir, pages)
 }
@@ -15,6 +14,6 @@ split_pdf(file_name, dir, pages)
 \item{file}{file}
 }
 \description{
-split pdf
 create a new pdf with a subset of the input pages
+A wrapper around \code{\link[qpdf:qpdf]{qpdf::pdf_subset()}}
 }

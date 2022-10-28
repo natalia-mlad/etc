@@ -32,10 +32,11 @@ then \code{basename(getwd())} will be used.}
 The path, invisibly.
 }
 \description{
-Create a package just how I like it <3
+A personalised version of \code{\link[usethis:create_package]{usethis::create_package()}}
 }
-\note{
-check golem::create_golem for more inspiration;
-magrittr pipe
-example DevelopMyPackage("bunny")
+\examples{
+\dontrun{
+DevelopMyPackage("bunny")
+}
+
 }

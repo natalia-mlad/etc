@@ -86,7 +86,7 @@ extract_my_zips <- function(dirpath, all = FALSE, recurse = FALSE) {
   ## Checks
   my_zips <- my_zips %>%
     dplyr::mutate(extracted_contents = name %>%
-             purrr::map(~ dir_info(.x, type = "file", all = T,
+             purrr::map(~ fs::dir_info(.x, type = "file", all = T,
                             recurse = T, fail = F)),
            .after = n_zip) %>%
     dplyr::mutate(n_extracted = purrr::map_int(extracted_contents, nrow),

@@ -36,13 +36,13 @@ code.converter <- function(script) {
   comments <- str_subset(raw, "#")
   report1 <- raw[!(raw %in% code)]
   report2 <- CodeDepends::getDetailedTimelines(info = cd) %>%
-    group_by(step) %>%
-    summarise(n.used = sum(used), n.defined = sum(defined)) %>%
-    filter(n.defined == 0) %>% select(step) %>%
+    dplyr::group_by(step) %>%
+    dplyr::summarise(n.used = sum(used), n.defined = sum(defined)) %>%
+    dplyr::filter(n.defined == 0) %>% dplyr::select(step) %>%
     map( ~ src[.x] %>% paste()) %>% flatten_chr()
 
   # Step 3: write to files ####
-  dir_create("CLEANED")
+  fs::dir_create("CLEANED")
 
   fileConn <- file(paste0("CLEANED/CLEANED-", script))
   writeLines(
@@ -123,7 +123,7 @@ code.converter <- function(script) {
 cc_findFiles <- function(path = NULL) {
   if (is.null(path)) path <- fs::path_wd()
   fs::dir_info(path = path, glob = "*.Rmd|.R") %>%
-    arrange(desc(modification_time)) %>%
-    select(path, size, modification_time) %>%
+    dplyr::arrange(dplyr::desc(modification_time)) %>%
+    dplyr::select(path, size, modification_time) %>%
     as.data.frame()
 }

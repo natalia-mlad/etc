@@ -82,7 +82,7 @@ identify_duplicates <- function(my_dir, glob, algo = "xxhash64", excluded_dir = 
   duplicate_files <- duplicate_files %>%
     dplyr::filter(!(id %in% mismatched_filesize))
 
-  n <- summarise(duplicate_files, n = n() - 1) %>% pull(n) %>% sum()
+  n <- dplyr::summarise(duplicate_files, n = dplyr::n() - 1) %>% dplyr::pull(n) %>% sum()
   usethis::ui_done("{n} duplicate files found.")
 
   return(duplicate_files)
